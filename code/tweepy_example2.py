@@ -30,4 +30,4 @@ if __name__ == '__main__':
 
     stream = Stream(auth, l)
     
-    stream.filter(track=['covid vaccine', 'covid19 vaccine', 'covid-19 vaccine'], languages=['en'])
+    stream.filter(track=['get covid vaccine', 'get covid19 vaccine', 'get covid-19 vaccine'], languages=['en'])
