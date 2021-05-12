@@ -8,7 +8,7 @@ def calculate_sentiment(tweets_df):
     tweets_df['sentiment'] = tweets_df['sentiment_score'].apply(
         lambda score: 'positive' if score > 0 else ('negative' if score < 0 else 'neutral'))
     print(tweets_df['sentiment'].value_counts())
-    tweets_df.to_csv('../data/tweets_sentiment.csv', index=False, header=True)
+    tweets_df.to_csv('../data/tweets_sentiment_textblob.csv', index=False, header=True)
 
     return tweets_df
 
