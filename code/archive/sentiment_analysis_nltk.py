@@ -29,5 +29,5 @@ def calculate_sentiment(tweets_df):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("../data/tweets_cleaned.csv")
+    df = pd.read_csv("../../data/tweets_cleaned.csv")
     df_sentiment = calculate_sentiment(df)

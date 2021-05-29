@@ -3,7 +3,9 @@ import preprocessor as p
 from datetime import datetime
 from state_dict import us_state_abbrev, states
 import pandas as pd
+import re
 from gensim.parsing.preprocessing import remove_stopwords
+from dateutil.parser import parse
 
 
 def process_location(raw_location):
@@ -42,6 +44,10 @@ def process_location(raw_location):
     return None
 
 
+def de_emojify(inputString):
+    return inputString.encode('ascii', 'ignore').decode('ascii')
+
+
 def process_text(raw_text):
     # library preprocessing
     processed_text = p.clean(raw_text)
@@ -76,6 +82,9 @@ def preprocessing():
         if 'RT @' in tweet['text']:
             continue
 
+        if datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y') >= datetime.strptime("2021-05-28", "%Y-%m-%d"):
+            continue
+
         exclude_retweet += 1
 
         # include only tweets in US with state level location
@@ -108,5 +117,49 @@ def preprocessing():
     tweets_df.to_csv('../data/tweets_cleaned.csv', index=False, header=True)
 
 
+def preprocessing_kaggle():
+    raw_df = pd.read_csv("../data/vaccination_all_tweets.csv")
+    original_tweet_count = 0
+    passed_tweet = 0
+    tweets_cleaned = []
+
+    for index, row in raw_df.iterrows():
+        original_tweet_count += 1
+
+        if row['is_retweet']:
+            continue
+
+        if isinstance(row['user_location'], float):
+            continue
+
+        # include only tweets in US with state level location
+        processed_location = process_location(row['user_location'])
+
+        if processed_location is None:
+            continue
+
+        tweet_cleaned = {
+            'date': row['date'],
+            'text': process_text(row['text']),
+            'location': processed_location,
+            'user_name': row['user_name'],
+            'user_followers': row['user_followers'],
+            'user_friends': row['user_friends'],
+            'user_favorites': row['user_favourites'],
+        }
+
+        tweets_cleaned.append(tweet_cleaned)
+
+        passed_tweet += 1
+
+    print(original_tweet_count)
+    print(passed_tweet)
+
+    tweets_df = pd.DataFrame(tweets_cleaned)
+    tweets_df.sort_values(by='date').reset_index(drop=True)
+    tweets_df.to_csv('../data/tweets_cleaned.csv', index=False, header=True)
+
+
 if __name__ == "__main__":
     preprocessing()
+    # preprocessing_kaggle()
