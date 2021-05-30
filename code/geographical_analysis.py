@@ -178,7 +178,7 @@ def calculate_positive_rate_by_location(tweets_df):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("../data/tweets_sentiment_textblob.csv")
+    df = pd.read_csv("../data/tweets_sentiment_NLTK.csv")
     group_sentiment_by_location(df)
     calculate_sentiment_percentage_by_location(df)
     calculate_discussion_rate_by_state(df)

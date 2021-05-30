@@ -19,7 +19,7 @@ def yellow_color_func(word, font_size, position, orientation, random_state=None,
     return f"hsl(42, 100%, {random.randint(25, 50)}%)"
 
 
-def generate_word_cloud(df, sentiment, color_func):
+def generate_word_cloud(df, sentiment, color_func, tool):
     stopwords = set(STOPWORDS)
     # stopwords.update(["covid", "covid vaccine", "vaccination", "vaccinated", "vaccine", "people"])
     lemmatizer = WordNetLemmatizer()
@@ -35,12 +35,14 @@ def generate_word_cloud(df, sentiment, color_func):
     plt.figure()
     plt.imshow(wordcloud.recolor(color_func=color_func, random_state=3), interpolation="bilinear")
     plt.axis("off")
-    plt.savefig("../data/results/" + sentiment + "_wordcloud.png")
+    plt.savefig("../data/results/" + sentiment + "_" + tool + "_wordcloud.png")
     plt.show()
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("../data/tweets_sentiment_textblob.csv")
-    generate_word_cloud(df, 'positive', green_color_func)
-    generate_word_cloud(df, 'neutral', yellow_color_func)
-    generate_word_cloud(df, 'negative', red_color_func)
+    tool = 'textblob'
+    df = pd.read_csv("../data/tweets_sentiment_" + tool + ".csv")
+    df = pd.read_csv("../data/tweets_sentiment_" + tool + ".csv")
+    generate_word_cloud(df, 'positive', green_color_func, tool)
+    generate_word_cloud(df, 'neutral', yellow_color_func, tool)
+    generate_word_cloud(df, 'negative', red_color_func, tool)

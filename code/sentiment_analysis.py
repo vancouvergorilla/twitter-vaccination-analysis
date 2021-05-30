@@ -23,10 +23,10 @@ def calculate_sentiment_nltk(tweets_df):
     tweets_df['sentiment_score'] = tweets_df['text'].apply(lambda x: sia.polarity_scores(x))
 
     # Obtaining NLTK compound score
-    tweets_df['sentiment_cmp_score'] = tweets_df['sentiment_score'].apply(lambda score_dict: score_dict['compound'])
+    tweets_df['sentiment_score'] = tweets_df['sentiment_score'].apply(lambda score_dict: score_dict['compound'])
 
     # Categorize scores into the sentiments of positive, neutral or negative
-    tweets_df['sentiment'] = tweets_df['sentiment_cmp_score'].apply(
+    tweets_df['sentiment'] = tweets_df['sentiment_score'].apply(
         lambda score: 'positive' if score > 0 else ('negative' if score < -0 else 'neutral'))
 
     print(tweets_df['sentiment'].value_counts())
